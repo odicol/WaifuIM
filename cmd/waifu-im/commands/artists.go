@@ -5,10 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/url"
-	"os"
-	"os/signal"
-	"syscall"
-	"time"
 	"waifuIM/internal/client"
 	"waifuIM/internal/models"
 
@@ -52,12 +48,7 @@ func NewArtistsCMD() *cobra.Command {
 		Long:  `List registered artists based on a specific search criteria`,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			c := client.New()
-
-			ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
-			defer stop()
-			ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
-			defer cancel()
-
+			ctx := getContext()
 			params := buildArtistsParams(name, page, pageSize)
 			res, err := getArtists(ctx, c, params)
 			if err != nil {

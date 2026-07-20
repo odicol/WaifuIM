@@ -8,9 +8,6 @@ import (
 	"io"
 	"net/url"
 	"os"
-	"os/signal"
-	"syscall"
-	"time"
 	"waifuIM/internal/client"
 	"waifuIM/internal/models"
 
@@ -86,12 +83,7 @@ func NewAlbumsCMD() *cobra.Command {
 		Long:  `List the albums of a specific user (or for the current user if not specified)`,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			c := client.New(client.WithAPIKey(os.Getenv("API_KEY")))
-
-			ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
-			defer stop()
-			ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
-			defer cancel()
-
+			ctx := getContext()
 			query := url.Values{}
 			if page != "" {
 				query.Set("Page", page)
@@ -125,12 +117,7 @@ func NewAlbumDetailsCMD() *cobra.Command {
 		Long:  `Get album details by ID`,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			c := client.New(client.WithAPIKey(os.Getenv("API_KEY")))
-
-			ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
-			defer stop()
-			ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
-			defer cancel()
-
+			ctx := getContext()
 			res, err := getAlbumDetails(ctx, c, userID, albumID)
 			if err != nil {
 				return err
@@ -168,12 +155,7 @@ func NewCreateAlbumCMD() *cobra.Command {
 			}
 
 			bodyReader := bytes.NewBuffer(jsonBytes)
-
-			ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
-			defer stop()
-			ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
-			defer cancel()
-
+			ctx := getContext()
 			res, err := postAlbum(ctx, c, userID, bodyReader)
 			if err != nil {
 				return err
@@ -214,12 +196,7 @@ func NewUpdateAlbumCMD() *cobra.Command {
 			}
 
 			bodyReader := bytes.NewBuffer(jsonBytes)
-
-			ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
-			defer stop()
-			ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
-			defer cancel()
-
+			ctx := getContext()
 			res, err := patchAlbum(ctx, c, userID, albumID, bodyReader)
 			if err != nil {
 				return err
@@ -250,12 +227,7 @@ func NewDeleteAlbumCMD() *cobra.Command {
 		RunE: func(cmd *cobra.Command, args []string) error {
 			// only 1 retry to avoid multiple deletes
 			c := client.New(client.WithAPIKey(os.Getenv("API_KEY")), client.WithMaxRetries(1))
-
-			ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
-			defer stop()
-			ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
-			defer cancel()
-
+			ctx := getContext()
 			res, err := deleteAlbum(ctx, c, userID, albumID)
 			if err != nil {
 				return err

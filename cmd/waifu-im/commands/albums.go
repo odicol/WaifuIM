@@ -89,7 +89,7 @@ func NewAlbumsCMD() *cobra.Command {
 
 			ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 			defer stop()
-			ctx, cancel := context.WithTimeout(cmd.Context(), 10*time.Second)
+			ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
 			defer cancel()
 
 			query := url.Values{}
@@ -128,7 +128,7 @@ func NewAlbumDetailsCMD() *cobra.Command {
 
 			ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 			defer stop()
-			ctx, cancel := context.WithTimeout(cmd.Context(), 10*time.Second)
+			ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
 			defer cancel()
 
 			res, err := getAlbumDetails(ctx, c, userID, albumID)
@@ -171,7 +171,7 @@ func NewCreateAlbumCMD() *cobra.Command {
 
 			ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 			defer stop()
-			ctx, cancel := context.WithTimeout(cmd.Context(), 10*time.Second)
+			ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
 			defer cancel()
 
 			res, err := postAlbum(ctx, c, userID, bodyReader)
@@ -217,7 +217,7 @@ func NewUpdateAlbumCMD() *cobra.Command {
 
 			ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 			defer stop()
-			ctx, cancel := context.WithTimeout(cmd.Context(), 10*time.Second)
+			ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
 			defer cancel()
 
 			res, err := patchAlbum(ctx, c, userID, albumID, bodyReader)
@@ -253,7 +253,7 @@ func NewDeleteAlbumCMD() *cobra.Command {
 
 			ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 			defer stop()
-			ctx, cancel := context.WithTimeout(cmd.Context(), 10*time.Second)
+			ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
 			defer cancel()
 
 			res, err := deleteAlbum(ctx, c, userID, albumID)

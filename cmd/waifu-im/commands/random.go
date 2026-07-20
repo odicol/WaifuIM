@@ -15,7 +15,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func getRandomImage(ctx context.Context, c *client.Client, query url.Values) (string, error) {
+func getRandomImage(ctx context.Context, c client.WaifuIMClient, query url.Values) (string, error) {
 	res, err := c.GET(ctx, "/images", query)
 	if err != nil {
 		return "", err

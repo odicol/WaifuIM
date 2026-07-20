@@ -15,7 +15,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func getTags(ctx context.Context, c *client.Client, query url.Values) (string, error) {
+func getTags(ctx context.Context, c client.WaifuIMClient, query url.Values) (string, error) {
 	res, err := c.GET(ctx, "/tags", query)
 	if err != nil {
 		return "", err

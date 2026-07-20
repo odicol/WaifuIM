@@ -15,7 +15,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func getArtists(ctx context.Context, c *client.Client, query url.Values) (string, error) {
+func getArtists(ctx context.Context, c client.WaifuIMClient, query url.Values) (string, error) {
 	res, err := c.GET(ctx, "/artists", query)
 	if err != nil {
 		return "", err

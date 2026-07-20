@@ -140,7 +140,7 @@ func NewAlbumDetailsCMD() *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVarP(&userID, "usedID", "u", "me", "The user ID or \"me\" for the current user")
+	cmd.Flags().StringVarP(&userID, "userID", "u", "me", "The user ID or \"me\" for the current user")
 	cmd.Flags().StringVarP(&albumID, "albumID", "a", "favorites", "The album ID or \"favorites\" if not specified")
 
 	return cmd
@@ -184,7 +184,7 @@ func NewCreateAlbumCMD() *cobra.Command {
 	}
 	cmd.Flags().StringVarP(&name, "name", "n", "", "Name of the album")
 	cmd.Flags().StringVarP(&description, "description", "d", "", "Description of the album")
-	cmd.Flags().StringVarP(&userID, "usedID", "u", "me", "The user ID or \"me\" for the current user")
+	cmd.Flags().StringVarP(&userID, "userID", "u", "me", "The user ID or \"me\" for the current user")
 
 	_ = cmd.MarkFlagRequired("name")
 	_ = cmd.MarkFlagRequired("description")
@@ -230,8 +230,8 @@ func NewUpdateAlbumCMD() *cobra.Command {
 	}
 	cmd.Flags().StringVarP(&name, "name", "n", "", "New name of the album")
 	cmd.Flags().StringVarP(&description, "description", "d", "", "New description of the album")
-	cmd.Flags().StringVarP(&userID, "usedID", "u", "me", "The user ID or \"me\" for the current user")
-	cmd.Flags().StringVarP(&albumID, "albumID", "a", "", "The album IDto be updated")
+	cmd.Flags().StringVarP(&userID, "userID", "u", "me", "The user ID or \"me\" for the current user")
+	cmd.Flags().StringVarP(&albumID, "albumID", "a", "", "The album ID to be updated")
 
 	_ = cmd.MarkFlagRequired("name")
 	_ = cmd.MarkFlagRequired("description")
@@ -246,7 +246,7 @@ func NewDeleteAlbumCMD() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "delete-album",
 		Short: "Delete an album",
-		Long:  `Delete an existing album with`,
+		Long:  `Delete an existing album`,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			// only 1 retry to avoid multiple deletes
 			c := client.New(client.WithAPIKey(os.Getenv("API_KEY")), client.WithMaxRetries(1))
@@ -264,8 +264,8 @@ func NewDeleteAlbumCMD() *cobra.Command {
 			return nil
 		},
 	}
-	cmd.Flags().StringVarP(&userID, "usedID", "u", "me", "The user ID or \"me\" for the current user")
-	cmd.Flags().StringVarP(&albumID, "albumID", "a", "", "The album IDto be updated")
+	cmd.Flags().StringVarP(&userID, "userID", "u", "me", "The user ID or \"me\" for the current user")
+	cmd.Flags().StringVarP(&albumID, "albumID", "a", "", "The album ID to be updated")
 
 	_ = cmd.MarkFlagRequired("albumID")
 

@@ -5,6 +5,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/url"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
 	"waifuIM/internal/client"
 	"waifuIM/internal/models"
 
@@ -48,7 +52,10 @@ func NewTagsCMD() *cobra.Command {
 		Long:  `List available tags based on a specific search criteria`,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			c := client.New()
-			ctx := getContext()
+			ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+			defer stop()
+			ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
+			defer cancel()
 			params := buildTagsParams(name, page, pageSize)
 			res, err := getTags(ctx, c, params)
 			if err != nil {

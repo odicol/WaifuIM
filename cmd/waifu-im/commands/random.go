@@ -5,6 +5,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/url"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
 	"waifuIM/internal/client"
 	"waifuIM/internal/models"
 
@@ -56,7 +60,10 @@ func NewRandomCMD() *cobra.Command {
 		Short: "Generate random image",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			c := client.New()
-			ctx := getContext()
+			ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+			defer stop()
+			ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
+			defer cancel()
 			params := buildRandomParams(page, pageSize, includeTag, excludeTag, isNSFW, includeArtists)
 			res, err := getRandomImage(ctx, c, params)
 			if err != nil {
